@@ -1,4 +1,15 @@
 {% extends 'main.html'%}
 {% block content%}
-<div>SHOP </div>
+<div class="container my-4"><div>SHOP </div>
+ 
+{% for shop in shops %}
+<a href="{% url 'update-shop' shop.id %}">{{shop.name}}</a>
+<p>{{shop.description}}</p>
+<h3>Opens at: {{shop.open_time}}</h3>
+<h3>Closes at: {{shop.close_time}}</h3>
+
+<a href="{% url 'delete-shop' shop.id %}" class='text-danger'>delete</a>
+<hr></a>
+{% endfor  %}
+
 {% endblock content %}
