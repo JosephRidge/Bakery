@@ -7,28 +7,17 @@ Render our templates using views
 """
 from .models import Recipe
 
-# Create your views here.
 def home(request):
     return render(request, 'base/home.html')
 
-"""
-SQL : 
-SELECT *  FROM Recipes; 
-
-'
-'
-ORM
-'
-'
-
-django:   
-recipes = Recipe.object.all() 
-"""
-
 def recipe(request):
-    recipes = Recipe.objects.all() 
-    context = {"recipes": recipes}
+    recipes = Recipe.objects.all() # fetched all the recipes
+    context = {"recipes":recipes}
     return render(request, 'base/recipe.html', context)
+
+def reciperForm(request):
+
+    return render(request, 'base/recipe_form.html')
 
 def shop(request):
     return render(request, 'base/shop.html')
