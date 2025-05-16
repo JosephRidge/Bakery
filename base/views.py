@@ -17,17 +17,26 @@ def recipe(request, pk):
     return render(request, 'base/recipe.html',context)
 
 def createRecipe(request):
-    form = RecipeForm()
-
+    form = RecipeForm()  # inialization
     if request.method == 'POST':
+        form = RecipeForm(request.POST)
         if form.is_valid():
-            form = RecipeForm(request.POST)
-            form.save()
-            print(form)
-            return redirect('recipes')
-
+            form.save() 
+            return redirect('recipes') 
     context = {'form': form}
     return render(request,'base/recipe_form.html', context)
+
+def updateRecipe(request, pk):
+    recipe = Recipe.objects.get(id=pk)
+    form = RecipeForm(instance=recipe)
+    if request.method == 'POST':
+        form = RecipeForm(request.POST, instance =recipe)
+        form.save()
+        return redirect('recipes')
+
+    context = {'form':form}
+    return render(request,'base/recipe_form.html', context)
+
 
 def shop(request):
     return render(request, 'base/shop.html')
