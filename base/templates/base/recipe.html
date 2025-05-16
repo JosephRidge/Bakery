@@ -2,17 +2,14 @@
 <div class="container row  my-4 mx-4 gap-2">
   
  {% for recipe in recipes %}
-{{recipe.id}}. {{recipe.name}} <br>
- {% comment %} <div class="card border-success mb-3 col-12 md:col-6 " style="max-width: 18rem">
-  <div class="card-header fs-7 lead bg-transparent border-success">{{recipe.name}}</div>
-  <div class="card-body text-success">
-  
+{{recipe.id}}. {{recipe.name}} 
 
-    <div class="fs-6">It takes {{recipe.prepTime}} min to prepare and {{recipe.cookTime}} minutes to cook. </div>
-  </div>
-  <div class="card-footer   border-success"> <span class="badge bg-success">Ksh. {{recipe.price}}</span></div>
-</div> {% endcomment %}
+<div class="flex"> 
+  <a href="{% url 'update-recipe' recipe.id %}"> update me</a>
+  <a href="{% url 'delete-recipe' recipe.id %}" class="text-danger mx-4"> get rid of me</a></div>
+ <br>
  {% endfor %}
+<a href="{% url 'create-recipe' %}"> create form </a>
 
 </div>
 
