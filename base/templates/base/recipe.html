@@ -1,16 +1,15 @@
 {% extends 'main.html'%} {% block content%}
-<div class="container row  my-4 mx-4 gap-2">
-  
- {% for recipe in recipes %}
-{{recipe.id}}. {{recipe.name}} 
 
-<div class="flex"> 
-  <a href="{% url 'update-recipe' recipe.id %}"> update me</a>
-  <a href="{% url 'delete-recipe' recipe.id %}" class="text-danger mx-4"> get rid of me</a></div>
- <br>
- {% endfor %}
-<a href="{% url 'create-recipe' %}"> create form </a>
-
+<div class="container my-4 fs-6">
+  <h1>{{recipe.name}} <span class="badge bg-info">{{recipe.price}}</span></h1>
+  <p>
+    Level: <span class="badge bg-success">{{recipe.get_level_display}}</span>
+    <br />
+    {{recipe.decription}}
+  </p>
+  <h2>Ingredients</h2>
+  <div>{{recipe.ingredients}}</div>
+  <h2>steps</h2>
+  <div>{{recipe.steps}}</div>
 </div>
-
 {% endblock content %}
