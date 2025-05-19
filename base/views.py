@@ -16,6 +16,9 @@ def recipe(request, pk):
     context = {'recipe':recipe}
     return render(request, 'base/recipe.html',context)
 
+"""
+We are now starting the CRUD operations by this we mean Create Read Update and Delete
+ """
 def createRecipe(request):
     form = RecipeForm()  # inialization
     if request.method == 'POST':
@@ -36,7 +39,6 @@ def updateRecipe(request, pk):
 
     context = {'form':form}
     return render(request,'base/recipe_form.html', context)
-
 
 def shop(request):
     return render(request, 'base/shop.html')
