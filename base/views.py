@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Recipe
-from .forms import RecipeForm
+from .models import Recipe, Shop
+from .forms import RecipeForm, ShopForm
 
 
 def home(request):
@@ -42,6 +42,19 @@ def updateRecipe(request, pk):
 
 def shop(request):
     return render(request, 'base/shop.html')
+
+# Create operation => POST
+def createShop(request):
+    form = ShopForm() # instance of the shop form
+    if request.method =='POST':
+        form = ShopForm(request.POST)
+        if form.is_valid():
+            form.save() # create the data in DB
+            return redirect('shop')
+            
+    context = {"form":form} 
+    return render(request, 'base/shop_form.html', context)
+
 
 def cart(request):
     return render(request, 'base/cart.html')
