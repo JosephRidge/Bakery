@@ -2,7 +2,7 @@
 <form method="POST" class="container my-4 ">
   {% csrf_token %}
   <div class="d-flex"> 
-    <a class="badge bg-success py-2 px-3 m-2 " href='{% url 'request.META.get("HTTP_REFERER")' %}>I am not sure about this</a>
+    <a class="badge bg-success py-2 px-3 m-2 " href="{{request.META.HTTP_REFERER}}">I am not sure about this</a>
     <input type="submit" value="delete"/> 
     <div>
 </form>

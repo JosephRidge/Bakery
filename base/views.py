@@ -1,6 +1,17 @@
 from django.shortcuts import render, redirect
 from .models import Recipe, Shop
 from .forms import RecipeForm, ShopForm
+from django.contrib.auth.models import User
+
+def loginUser(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = User.objects.create_user(username, password)
+        print(f"user ==> {user }")
+
+    return render(request, 'base/login.html')
+
 
 def home(request):
     return render(request, 'base/home.html')
@@ -39,16 +50,19 @@ def updateRecipe(request, pk):
     context = {'form':form}
     return render(request,'base/recipe_form.html', context)
 
+# read all from the DB
 def shops(request):
     shops = Shop.objects.all()
     context = {"shops":shops}
     return render(request, 'base/shops.html', context)
 
+# Read one from the DB
 def shop(request, pk):
     shop = Shop.objects.get(id=pk)
     context = {"shop": shop}
     return render(request, 'base/shop.html', context)
 
+# update target item
 def updateShop(request, pk):
     shop = Shop.objects.get(id=pk)
     form = ShopForm(instance= shop)
@@ -59,12 +73,14 @@ def updateShop(request, pk):
     context = {"form":form}
     return render(request, 'base/shop_form.html', context)
 
+# Delete item
 def deleteShop(request, pk):
     shop = Shop.objects.get(id=pk)
     context ={"shop":shop}
-
+    if request.method == "POST":
+        shop.delete()
+        return redirect('shops')
     return render(request, 'base/delete_form.html', context)
-
 
 # Create operation => POST
 def createShop(request):
@@ -73,7 +89,7 @@ def createShop(request):
         form = ShopForm(request.POST)
         if form.is_valid():
             form.save() # create the data in DB
-            return redirect('shop')
+            return redirect('shops')
             
     context = {"form":form} 
     return render(request, 'base/shop_form.html', context)
