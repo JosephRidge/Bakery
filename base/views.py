@@ -2,12 +2,28 @@ from django.shortcuts import render, redirect
 from .models import Recipe, Shop
 from .forms import RecipeForm, ShopForm
 from django.contrib.auth.models import User
+from django.contrib import messages 
+from django.contrib.auth import authenticate
 
 def loginUser(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = User.objects.create_user(username, password)
+        user = ""
+        try:
+            user = User.objects.get(username=username) 
+            user = authenticate(request, username =username , password=password)
+            print(user)
+
+            if user is not None:
+                messages.info(request, "Authenticated!")
+            else:
+                messages.error(request, "Bad Credentials")
+
+            messages.error(request, "User exists!")
+        except:
+            messages.error(request, "User does not exist!")
+            
         print(f"user ==> {user }")
 
     return render(request, 'base/login.html')
