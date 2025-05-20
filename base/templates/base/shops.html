@@ -1,0 +1,10 @@
+{% extends 'main.html'%}
+{% block content%}
+<div class="container my-4 ">
+    <div>SHOP </div>
+<a class= "badge bg-info text-dark px-2 py-2 my-2" href="{% url 'create-shop' %}"> add product</a>
+{% for item in shops %}
+<h6>
+<a href="{% url 'shop' item.id %}"> {{item}}</a> </h6>
+{% endfor %} </div>
+{% endblock content %}

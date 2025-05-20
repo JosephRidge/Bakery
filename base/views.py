@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from .models import Recipe, Shop
 from .forms import RecipeForm, ShopForm
 
-
 def home(request):
     return render(request, 'base/home.html')
 
@@ -40,8 +39,32 @@ def updateRecipe(request, pk):
     context = {'form':form}
     return render(request,'base/recipe_form.html', context)
 
-def shop(request):
-    return render(request, 'base/shop.html')
+def shops(request):
+    shops = Shop.objects.all()
+    context = {"shops":shops}
+    return render(request, 'base/shops.html', context)
+
+def shop(request, pk):
+    shop = Shop.objects.get(id=pk)
+    context = {"shop": shop}
+    return render(request, 'base/shop.html', context)
+
+def updateShop(request, pk):
+    shop = Shop.objects.get(id=pk)
+    form = ShopForm(instance= shop)
+    if request.method == 'POST':
+        form = ShopForm(request.POST, instance = shop)
+        form.save()
+        return redirect('shops')
+    context = {"form":form}
+    return render(request, 'base/shop_form.html', context)
+
+def deleteShop(request, pk):
+    shop = Shop.objects.get(id=pk)
+    context ={"shop":shop}
+
+    return render(request, 'base/delete_form.html', context)
+
 
 # Create operation => POST
 def createShop(request):

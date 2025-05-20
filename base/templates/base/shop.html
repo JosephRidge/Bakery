@@ -1,5 +1,13 @@
 {% extends 'main.html'%}
 {% block content%}
-<div>SHOP </div>
-<a class= "badge bg-info text-dark px-2 py-2 " href="{% url 'create-shop' %}"> add product</a>
+<div class="container my-4 ">
+    <a class= "badge bg-info text-dark px-2 py-2 my-2 " href="{% url 'create-shop' %}"> add product</a>
+    <a class= "badge bg-warning text-dark px-2 py-2 my-2 " href="{% url 'update-shop' shop.id %}"> update product</a>
+
+    <a class= "badge bg-danger text-dark px-2 py-2 my-2 " href="{% url 'delete-shop' shop.id %}"> delete product</a>
+<hr>
+    <div>{{shop.productName}} <span class="badge bg-info text-dark">Ksh. {{shop.price}} </span></div>
+    <div> Quantity remaining: {{shop.quantity}} </div>
+<hr>
+
 {% endblock content %}
