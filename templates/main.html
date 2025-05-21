@@ -12,6 +12,13 @@
   </head>
   <body class="bg-dark text-light">
     {% include 'navbar.html'%}
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li class="badge p-2 bg-secondary ">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
     {% block content %} {% endblock content %}
 
     <script
