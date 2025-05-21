@@ -54,6 +54,7 @@ class Recipe(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # organize from the latest to the oldest
     class Meta:
         ordering =['-updated_at','-created_at']
 
