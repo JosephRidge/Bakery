@@ -3,8 +3,23 @@ from .models import Recipe, Shop
 from .forms import RecipeForm, ShopForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
+
+def createUser(request):
+    form = UserCreationForm()
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Now login')
+            return redirect('login')
+            
+    context={"form":form}
+    return render(request, 'base/register.html', context)
 
 
 def logoutUser(request):
