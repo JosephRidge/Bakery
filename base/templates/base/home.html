@@ -1,4 +1,11 @@
 {% extends 'main.html'%}
 {% block content%}
-<div class="container my-4"> HOME </div>
+<div class="container my-4"> 
+    
+<div class=" text-dark bg-secondary w-100 text-break">
+<p> Welcome to BakeryHaven {{request.user.username}}</p>
+<p class=" "> you are   {{request.user.author.bio}}</p>
+ 
+</div>
+</div>
 {% endblock content %}

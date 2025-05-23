@@ -1,0 +1,8 @@
+{% block content%} 
+<form method="POST" class="container my-4 ">
+  {% csrf_token %}
+  {{commentForm}}
+  <input type="submit" />
+</form>
+
+{% endblock content %}

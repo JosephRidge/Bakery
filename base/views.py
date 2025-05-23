@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Recipe, Shop
-from .forms import RecipeForm, ShopForm
+from .models import Recipe, Shop, Post, Comment, Author
+from .forms import RecipeForm, ShopForm, PostForm, CommentForm, AuthorForm
 from django.contrib import messages
 
 # authentication 
@@ -11,14 +11,18 @@ from django.contrib.auth.forms import UserCreationForm
 
 def createUser(request):
     form = UserCreationForm()
+    bioForm = AuthorForm()
     if request.method =="POST":
         form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
+        bioForm = AuthorForm(request.POST)
+        if form.is_valid()  and bioForm.is_valid():
+            user = form.save()
+            bio = bioForm.cleaned_data.get('bio')  # Get the bio
+            Author.objects.create(user=user, bio=bio)
             messages.info(request, "Now you can login!")
             return redirect('login')
 
-    context = {"form":form}
+    context = {"form":form, "bioForm":bioForm}
     return render(request, 'base/register.html', context)
 
 def loginUser(request):  
@@ -144,3 +148,50 @@ def cart(request):
 
 def about(request):
     return render(request, 'base/about.html')
+
+
+def forum(request):
+    posts = Post.objects.all()
+    comments = Comment.objects.all()
+    context = {"posts":posts, "comments":comments}
+    return render(request, 'base/forum.html',context)
+
+
+def createPost(request):
+    form = PostForm() # instance of the shop form
+    if request.method =='POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save() # create the data in DB
+            return redirect('forum')
+            
+    context = {"form":form}  
+    return render(request, 'base/post_form.html',context)
+
+def createComment(request):
+    form = CommentForm() # instance of the shop form
+    if request.method =='POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form.save() # create the data in DB
+            return redirect('forum')
+            
+    context = {"form":form}  
+    return render(request, 'base/comment_form.html',context)
+
+def readPost(request, pk):
+    post = Post.objects.get(id=pk) 
+    comments = Comment.objects.filter(post=pk)
+    commentForm = CommentForm() 
+    if request.method =="POST":
+        commentForm = CommentForm(request.POST)
+        if commentForm.is_valid():
+            comment = commentForm.save(commit=False)
+            comment.post = post
+            comment.author  = request.user.author
+            comment.save() 
+            messages.info(request,"commented")
+            return redirect('read-post',pk=pk)
+
+    context = {"post":post, "comments":comments,"commentForm":commentForm}
+    return render(request, 'base/post.html', context)

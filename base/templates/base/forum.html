@@ -1,0 +1,19 @@
+{% extends 'main.html'%}
+{% block content%}
+<div class="container my-4">
+    
+    {% for post in posts %}
+
+    <div>
+
+        <h5>{{post.title}}
+        <a class="text-success ts7">{{post}}</a></h5>
+        <p>created on {{post.created_at}}</p>
+        <p>updated on {{post.updated_at}}</p>
+        <a href="{% url 'read-post' post.id %}" class="badge bg-warning text-dark"> read me<a/>
+        <hr>
+    </div>
+
+    {% endfor %}
+</div>
+{% endblock content %}

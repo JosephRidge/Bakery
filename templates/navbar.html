@@ -31,8 +31,11 @@
             <a class="nav-link" href="{% url 'login'%}">login</a>
             {% endif %}
           </li> 
-          <li class="nav-item h-100 my-2">
-            <a class="nav-link text-dark badge bg-info py-2" href=""> {{request.user.username}}</a>
+          <li class="nav-item">
+
+            {% if request.user.is_authenticated %}
+            <a class="nav-link" href="{% url 'forum' %}"> forum</a>
+            {% endif %}
           </li>
         </ul>
       </div>
