@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Recipe, Shop
-from .forms import RecipeForm, ShopForm
+from .forms import RecipeForm, ShopForm, AuthorForm
 from django.contrib import messages
 
 # authentication 
@@ -11,14 +11,20 @@ from django.contrib.auth.forms import UserCreationForm
 
 def createUser(request):
     form = UserCreationForm()
+    bioForm = AuthorForm()
     if request.method =="POST":
         form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
+        bioForm = AuthorForm(request.POST)
+        if form.is_valid() and bioForm.is_valid():
+            user = form.save()
+            bioForm = bioForm.save(commit=False)
+            bioForm.bio = bioForm.cleaned_data['bio']
+            bioForm.save()
+            # Author.objects.get()
             messages.info(request, "Now you can login!")
             return redirect('login')
 
-    context = {"form":form}
+    context = {"form":form, "bio":bioForm}
     return render(request, 'base/register.html', context)
 
 def loginUser(request):  
