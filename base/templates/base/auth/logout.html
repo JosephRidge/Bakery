@@ -1,0 +1,9 @@
+{% extends 'main.html'%} {% block content%}
+
+<form method="POST" class=" container w-50 my-4">
+  {% csrf_token%}
+
+  <a href="{{request.META.HTTP_REFERER}}">Are your sure about this?</a>
+  <input type="submit" value="Yes i am ..."/>
+</form>
+{% endblock %}

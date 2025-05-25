@@ -2,7 +2,14 @@
 {% block content%}
 <div class="container my-4">
 
-    <a class="badge bg-warning text-dark" href="{% url 'create-post'%}">Create Post </a>
-    
+    <a class="badge bg-warning text-dark my-2" href="{% url 'create-post'%}">Create Post </a>
+    {% for post in posts %}
+    <br>
+    <a href="{% url 'post' post.id %}" class="text-decoration-none "> <small class="text-info  ">@ {{post}}  <small class="mx-4 text-secondary"> {{post.created_at | timesince }} ago</small> </small>
+        <div class="container"> {{post.title }}  </div>
+    </a> 
+    <hr>
+    {% endfor %}
+
 </div>
 {% endblock content %}

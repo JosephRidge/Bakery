@@ -1,0 +1,40 @@
+{% extends 'main.html'%} {% block content%}
+<div class="container my-4">
+  <div> Welcome {{request.user.author}}</div>
+  <a class="badge bg-warning text-dark my-2" href="{% url 'create-post'%}"
+    >Create Post
+  </a>
+
+<div class="row">
+    <div class="col-10">
+        <br />
+        <small class="text-info"
+          >{{post}}
+          <small class="mx-4 text-secondary">
+            {{post.created_at | timesince }} ago</small
+          >
+        </small>
+      
+        <h2 class="mt-1">{{post.title }}</h2>
+        <p class="text-secondary">{{post.content}}</p>
+        <hr />
+      
+        <h3 class="">Comments</h3>
+        {% for comment in comments %}
+        <p class="text-break fs-6">{{comment.comment}}</p> 
+        <small class="text-secondary"
+          >posted {% if request.user.username == comment.author.user.username %} by you {% else %}{{comment}} {% endif %}{{comment.created_at | timesince}} ago
+        </small>
+      
+        <hr />
+        {% endfor %} {% include 'base/comment_form.html'%}
+    </div>
+    <div class="col-2">
+        <h3>Participants</h3> 
+        {% for participant in participants %}
+        <h6 class="mx-1 text-secondary">@ {{participant.username}}  {% if request.user.username == participant.username %} (you) {% endif%}</h6>
+        {% endfor %}  
+    </div>
+</div>
+</div>
+{% endblock content %}

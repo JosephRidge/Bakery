@@ -1,0 +1,8 @@
+ {% block content%} 
+<form method="POST" class="container my-4 ">
+  {% csrf_token %}
+  {{form.as_p}}
+  <input type="submit" value="send" />
+</form>
+
+{% endblock content %}

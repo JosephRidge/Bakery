@@ -1,82 +1,172 @@
 from django.shortcuts import render, redirect
-from .models import Recipe, Shop, Author
-from .forms import RecipeForm, ShopForm, AuthorForm, CommentForm, PostForm
+from .models import Recipe, Shop, Author, Post, Comment
+from .forms import RecipeForm, ShopForm, PostForm, AuthorForm, CommentForm
 from django.contrib import messages
 
 # authentication 
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User 
+from django.contrib.auth import login, authenticate, logout 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+ 
 
-def createUser(request):
-    form = UserCreationForm()
-    bioForm = AuthorForm()
-    if request.method =="POST":
-        form = UserCreationForm(request.POST)
-        bioForm = AuthorForm(request.POST)
-        if form.is_valid() and bioForm.is_valid():
-            user = form.save()         
-            bio = bioForm.cleaned_data.get('bio') 
-            Author.objects.create(user=user, bio=bio) # orm aspect => we are creating using the models 
-            messages.info(request, "Now you can login!")
-            return redirect('login')
 
-    context = {"form":form, "bio":bioForm}
-    return render(request, 'base/register.html', context)
-
-def loginUser(request):  
-    if request.method == 'POST':
+def forgotPassword(request):
+    context = {"form":"n/a"}
+    if request.method == "POST":
         username = request.POST.get('username')
-        password = request.POST.get('password')
-        # checked wheyther the user exists in the DB => Users table
+        
         try:
-            user = User.objects.get(username = username)
+            user = User.objects.get(username=username)
+            userId = user.id
+            print(f"====>> {userId}")
+            return redirect('update-password',pk=userId)
         except:
             messages.error(request, "User does not exist!")
-        # authenticated the user and checked whether the credentials are ok
-        user = authenticate(request, username=username, password=password) 
-        if user is not None: 
+        
+        
+    return render(request, 'base/auth/forgot_pass.html' , context)
+
+def updatePassword(request, pk):
+    print(f"====>> ARRIVED! ")
+    # user = User.objects.get(id=pk)
+    if request.method == "POST":
+        password = request.POST.get('password')
+
+    # print(f"====>> {user}")
+
+    return render(request, 'base/auth/pass_change.html')
+
+def registerUser(request):
+    form = UserCreationForm()
+    authorForm = AuthorForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        authorForm = AuthorForm(request.POST)
+        if form.is_valid() and authorForm.is_valid():
+            user  = form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            bio = authorForm.cleaned_data['bio']
+            author = Author.objects.create(
+                user = user,
+                bio = bio
+            )
+
+           # we can choose to login the user or take them to th elogin page let us make their work easier and login them
+            user = authenticate( request, username = username, password = password )
+            if user is not None: 
+                login(request, user)
+                messages.info(request, f"Welcome to the family {form.cleaned_data['username']}")                
+                return redirect('home')
+            else:
+                messages.info(request, "wrong credentials ")
+        else:
+            messages.error(request, "ooops! something went wrong!")
+            print(form.error)
+    context = {"form":form,"bio":authorForm}
+    return render(request, 'base/auth/register.html', context  )
+
+
+def loginUser(request):
+    if request.method == "POST":
+        # get user inputs 
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # check if user exists
+        try:
+            user = User.objects.filter(username = username)
+        except:
+            messages.error(request, "User does not exixt!")
+        
+        # validate the user 
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
             login(request, user)
-            messages.error(request, f"Welcome home {user.username}!")
+            messages.info(request, f"Welcome back {user.username}")
             return redirect('home')
         else:
-            messages.error(request, "Wrong Credentials")
-        
-    return render(request, "base/login.html")
+            messages.error(request, "Wrong credentials!")
 
-def logoutUser(request):
-    if request.method == "POST":
+    return render(request, 'base/auth/login.html'  )
+
+def logoutUser(request): 
+    if request.method =="POST":
+        messages.info(request, f"See you soon {request.user.username}")
         logout(request)
-        messages.info(request, "See you soon!")
         return redirect('login')
-    return render(request, "base/logout_form.html")
+    return render(request,'base/auth/logout.html'  )
+
+
+
+
+
+
+
+
+
+
+
 
 def home(request):
     return render(request, 'base/home.html')
 
 def createPost(request):
-    form = PostForm()
-    author = Author.objects.get(user=request.user)
-    print(request.user)
-    print(author)
+    author = request.user.author
+    print(f"==>>>> {author}")
+    form = PostForm() 
 
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        form.author = request.user
-        # form.author = requst.user
+    if request.method == 'POST':
+        form = PostForm(request.POST )  
         if form.is_valid():
-            post = form.save(commit=False)
-            # post.author = request.user
-            post.save()
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']        
+            post = Post.objects.create(
+            author = author, 
+            content= content,
+            title = title
+              )
             return redirect('forum')
+        else:
+            print('==> invalid')
+    
 
-    context ={"form":form}
+    context = {"form":form}
     return render(request, 'base/post_form.html', context)
 
 def forum(request):
-    return render(request, 'base/forum.html')
+    posts = Post.objects.all()
+    context = {"posts":posts}
+    return render(request, 'base/forum.html', context)
 
+
+def post(request, pk):
+    post = Post.objects.get(id=pk) 
+  
+    form = CommentForm()
+    comments = post.comment_set.all()
+    participants = post.participants.all()
+    if request.method =="POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.cleaned_data['comment'] 
+            Comment.objects.create(
+                comment = comment, 
+                author = request.user.author,
+                post = post
+            )
+            participants = post.participants.add(request.user)
+            # form.save()
+            return redirect('post',pk=pk)
+    context = {"post":post,"comments":comments, "form":form,"participants":participants}
+    return render(request, 'base/post.html', context)
+
+
+def comment(request):
+    return render(request)
 
 def recipes(request):
     recipes = Recipe.objects.all() # fetched all the recipes
