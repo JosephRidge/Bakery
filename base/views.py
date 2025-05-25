@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Recipe, Shop
-from .forms import RecipeForm, ShopForm, AuthorForm
+from .models import Recipe, Shop, Author
+from .forms import RecipeForm, ShopForm, AuthorForm, CommentForm, PostForm
 from django.contrib import messages
 
 # authentication 
@@ -16,11 +16,9 @@ def createUser(request):
         form = UserCreationForm(request.POST)
         bioForm = AuthorForm(request.POST)
         if form.is_valid() and bioForm.is_valid():
-            user = form.save()
-            bioForm = bioForm.save(commit=False)
-            bioForm.bio = bioForm.cleaned_data['bio']
-            bioForm.save()
-            # Author.objects.get()
+            user = form.save()         
+            bio = bioForm.cleaned_data.get('bio') 
+            Author.objects.create(user=user, bio=bio) # orm aspect => we are creating using the models 
             messages.info(request, "Now you can login!")
             return redirect('login')
 
@@ -56,6 +54,29 @@ def logoutUser(request):
 
 def home(request):
     return render(request, 'base/home.html')
+
+def createPost(request):
+    form = PostForm()
+    author = Author.objects.get(user=request.user)
+    print(request.user)
+    print(author)
+
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        form.author = request.user
+        # form.author = requst.user
+        if form.is_valid():
+            post = form.save(commit=False)
+            # post.author = request.user
+            post.save()
+            return redirect('forum')
+
+    context ={"form":form}
+    return render(request, 'base/post_form.html', context)
+
+def forum(request):
+    return render(request, 'base/forum.html')
+
 
 def recipes(request):
     recipes = Recipe.objects.all() # fetched all the recipes

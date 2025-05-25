@@ -17,4 +17,6 @@ urlpatterns = [
        path('shop/update-shop/<str:pk>/',views.updateShop, name='update-shop'),
        path('shop/delete-shop/<str:pk>/',views.deleteShop, name='delete-shop'),
        path('about/',views.about, name='about'),
+       path('forum/',views.forum, name='forum'),
+       path('create-post/',views.createPost, name='create-post'),
 ]
