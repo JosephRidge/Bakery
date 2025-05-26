@@ -1,20 +1,21 @@
 from django.forms import ModelForm 
-from .models import Recipe, Shop, Author, Post, Comment
-
-class AuthorForm(ModelForm):
-    class Meta: # metadata or rather extra information..
-        model = Author
-        fields =['bio']
+from .models import Recipe, Shop , Author, Comment, Post
 
 class PostForm(ModelForm):
-    class Meta:  
+    class Meta:
         model = Post
-        fields = '__all__'
+        fields =['title','content']
+
+class AuthorForm(ModelForm):
+    class Meta:
+        model = Author
+        fields = ['bio']
+
 
 class CommentForm(ModelForm):
-    class Meta:  
+    class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ['comment']
 
 class RecipeForm(ModelForm):
     class Meta:  

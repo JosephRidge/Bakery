@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Recipe, Shop, Author
-from .forms import RecipeForm, ShopForm, AuthorForm, CommentForm, PostForm
+from .models import Recipe, Shop , Author, Comment, Post
+from .forms import RecipeForm, ShopForm, PostForm,AuthorForm, CommentForm
 from django.contrib import messages
 
 # authentication 
@@ -10,19 +10,28 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 
 def createUser(request):
-    form = UserCreationForm()
-    bioForm = AuthorForm()
-    if request.method =="POST":
-        form = UserCreationForm(request.POST)
-        bioForm = AuthorForm(request.POST)
-        if form.is_valid() and bioForm.is_valid():
-            user = form.save()         
-            bio = bioForm.cleaned_data.get('bio') 
-            Author.objects.create(user=user, bio=bio) # orm aspect => we are creating using the models 
-            messages.info(request, "Now you can login!")
-            return redirect('login')
+    form = UserCreationForm()  
+    bio  = AuthorForm()
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)  
+        bio  = AuthorForm(request.POST)
 
-    context = {"form":form, "bio":bioForm}
+        if form.is_valid() and bio.is_valid():
+            user = form.save()
+            authorBio = bio.cleaned_data['bio']
+
+            Author.objects.create(
+                user = user,
+                bio = authorBio
+            )
+
+            messages.info(request, "Welcome home!")
+
+            return redirect('login')
+        else:
+            messages.error(request, "Something went wrong!")
+
+    context = {"form":form, "bio":bio} 
     return render(request, 'base/register.html', context)
 
 def loginUser(request):  
@@ -57,26 +66,51 @@ def home(request):
 
 def createPost(request):
     form = PostForm()
-    author = Author.objects.get(user=request.user)
-    print(request.user)
-    print(author)
+    author = request.user.author 
 
-    if request.method == "POST":
+    if request.method == "POST": 
         form = PostForm(request.POST)
-        form.author = request.user
-        # form.author = requst.user
+
         if form.is_valid():
-            post = form.save(commit=False)
-            # post.author = request.user
-            post.save()
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+            Post.objects.create(
+                author = author,
+                title = title,
+                content = content
+            )
             return redirect('forum')
 
     context ={"form":form}
     return render(request, 'base/post_form.html', context)
 
 def forum(request):
-    return render(request, 'base/forum.html')
+    posts = Post.objects.all()
+    context = {"posts":posts}
+    return render(request, 'base/forum.html', context)
 
+def readPost(request, pk):
+    post = Post.objects.get(id=pk)
+    comments =  post.comment_set.all() 
+    userContribs = post.people.all()
+    print(f"====> {userContribs}")
+    form = CommentForm()
+    author = request.user.author
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.cleaned_data['comment']
+            Comment.objects.create(
+                post = post,
+                author = author, 
+                comment = comment
+            )
+            post.people.add(request.user)
+            return redirect('read-post',pk=pk)
+
+    context = {"post":post, "form":form, "comments":comments,"contributors":userContribs}
+    return render(request, 'base/post.html', context)
 
 def recipes(request):
     recipes = Recipe.objects.all() # fetched all the recipes

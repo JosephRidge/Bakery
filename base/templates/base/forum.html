@@ -2,7 +2,12 @@
 {% block content%}
 <div class="container my-4">
 
-    <a class="badge bg-warning text-dark" href="{% url 'create-post'%}">Create Post </a>
+    <a class="badge bg-warning text-dark text-decoration-none p-2 " href="{% url 'create-post'%}">Create Post </a>
+
+    {% for post in posts %}
+    <a class="mt-2 text-decoration-none " href="{% url 'read-post' post.id %}"><h2>{{post.title }}</h2> </a>
+    <hr>
+    {% endfor %}
     
 </div>
 {% endblock content %}

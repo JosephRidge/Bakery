@@ -1,8 +1,7 @@
-{% extends 'main.html'%} {% block content%} 
+ {% block content%} 
 <form method="POST" class="container my-4 ">
   {% csrf_token %}
-  {{form}}
+  {{form.as_p}}
   <input type="submit" />
 </form>
-
 {% endblock content %}

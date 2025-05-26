@@ -1,0 +1,34 @@
+{% extends 'main.html'%} {% block content %}
+
+<div class=" container my-4 row mx-6">
+  <div class="col-10">
+    <div class="">
+      <h2>{{post.title}}</h2>
+      <p class="text-secondary ts-6">{{post.content}}</p>
+    </div>
+    <hr>
+
+    <h2 class="badge bg-secondary text-dark">Comments: </h2>
+    {% for comment in comments %}
+    <p class="text-secondary">{{comment.comment}}</p>
+    
+    <small class="text-warning"> posted {{comment.created_at | timesince }} ago</small>  <small> {{comment}}</small> 
+    <hr>
+
+    {% endfor%}
+   <div class="container ">
+    {% include 'base/post_form.html' %}
+
+   </div>
+
+  </div>
+
+  <div class="col-2">
+    <h2>Contributors</h2>
+    {% for contributor in contributors %}
+    <small>@{{contributor}}</small>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
