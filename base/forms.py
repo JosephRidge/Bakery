@@ -1,5 +1,20 @@
 from django.forms import ModelForm
-from .models import Recipe, Shop
+from .models import Recipe, Shop, Author, Comment, Post
+
+class AuthorForm(ModelForm):
+    class Meta: 
+        model = Author
+        fields = ['bio']
+
+class CommentForm(ModelForm):
+    class Meta: 
+        model = Comment
+        fields = ['comment']
+
+class PostForm(ModelForm):
+    class Meta: 
+        model = Post
+        fields = ['title','content']
 
 class RecipeForm(ModelForm):
     class Meta: 

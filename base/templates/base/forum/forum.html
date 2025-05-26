@@ -1,0 +1,10 @@
+{% extends 'main.html'%}
+{% block content%}
+<a href="{% url 'create-post' %}" class="bg-warning text-dark p-2 my-4 badge text-decoration-none ">create post</a>
+<br>
+{% for post in posts %}
+<a class="text-decoration-none " href="{% url 'post' post.id %}"> {{post.title}}</a>
+<hr>
+{% endfor %}
+
+{% endblock content %}

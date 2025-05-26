@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
-from .forms import RecipeForm, ShopForm  
+from .forms import RecipeForm, ShopForm, AuthorForm, CommentForm, PostForm
 from django.contrib.auth.models import User 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from .models import Author, Comment, Post
 
 """
 Render our templates using views
@@ -42,18 +43,79 @@ def logoutUser(request):
 
 def registerUser(request):  
     form = UserCreationForm()
-    context = {"form":form}
+    bio = AuthorForm()
 
     if request.method=="POST":
         form = UserCreationForm(request.POST)
-        if form.is_valid():
-           form.save()
-           return redirect('login')
+        bio = AuthorForm(request.POST)
+        if form.is_valid() and bio.is_valid():
+           user = form.save()
+           authorBio = bio.cleaned_data['bio']
+           userpassword = form.cleaned_data['password2']
+
+           author = Author.objects.create(
+            user = user, 
+            bio = bio
+           ) 
+           user = authenticate(request, username = author.user.username, password=userpassword)
+           print(f"==> {user}")
+           if user is not None:
+                messages.info(request, f"Welcome {user.username}")
+                login(request, user)
+                return redirect('home')
+           
+    context = {"form":form, "bio":bio}
     return render(request, 'base/auth/register.html', context)
 
 def home(request):
     return render(request, 'base/home.html')
  
+def forum(request):
+    posts = Post.objects.all()
+    context = {"posts":posts}
+    return render(request, 'base/forum/forum.html',context)
+
+def post(request, pk):
+    post = Post.objects.get(id=pk)
+    form = CommentForm()
+    comments = post.comment_set.all()
+    author = request.user.author
+    participants = post.participants.all()
+    if request.method == "POST": 
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.cleaned_data['comment']
+            Comment.objects.create(
+                author = author, 
+                post = post, 
+                comment = comment 
+            )
+            post.participants.add(request.user)
+            return redirect('post',pk=pk)
+
+    context = {"post":post,"comments":comments,"form":form,"participants":participants}
+    return render(request, 'base/forum/post.html',context)
+
+def createPost(request):
+    form = PostForm()
+    author = request.user.author 
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content'] 
+
+            Post.objects.create(
+                author = author, 
+                title = title,
+                content = content
+            )
+            return redirect('forum')
+    context = {"form": form}
+    return render(request, 'base/forum/form.html', context)
+
+
 @login_required(login_url='login')
 def recipe(request):
     recipes = Recipe.objects.all() 

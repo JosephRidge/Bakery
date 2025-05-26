@@ -1,0 +1,31 @@
+{% extends 'main.html'%}
+{% block content%}
+ 
+<div class="row">
+
+    <div class="col-9"><h2 class="textdecoration-none"> {{post.title}}</h2>
+        <p class="text-secondary container"> {{post.content}}</p>
+        
+        <div class="badge bg-secondary text-dark">Comments</div>
+        
+        {% for comment in comments %}
+        <p class="text-decoration-none"> {{comment.comment}} </p>
+        <small class="">{{comment}} posted at {{comment.created_at |timesince }}</small>
+        
+        <hr>
+        {% endfor %}
+        
+        <div> {% include 'base/forum/form.html'%}</div></div>
+    <div class="col-3">
+        <div class="badge bg-secondary text-dark">Participants</div>
+        {% for participant in participants %}
+        <p class="text-decoration-none"> {{comment.comment}} </p>
+        <small class="">@{{participant.username}} </small>
+        
+        <hr>
+        {% endfor %}
+    </div>
+</div>
+ 
+
+{% endblock  %}

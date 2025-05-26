@@ -15,4 +15,8 @@ urlpatterns = [
        path('update-shop/<str:pk>/',views.updateShop, name='update-shop'),
        path('delete-shop/<str:pk>/',views.deleteShop, name='delete-shop'),
 
+       path('forum/',views.forum, name='forum'),
+       path('post/<str:pk>/',views.post, name='post'),
+       path('create-post/',views.createPost, name='create-post'),
+
  ]
