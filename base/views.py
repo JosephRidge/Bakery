@@ -92,7 +92,7 @@ def forum(request):
 def readPost(request, pk):
     post = Post.objects.get(id=pk)
     comments =  post.comment_set.all() 
-    userContribs = post.people.all()
+    userContribs = post.persons.all()
     print(f"====> {userContribs}")
     form = CommentForm()
     author = request.user.author
