@@ -1,7 +1,7 @@
 {% extends 'main.html'%} {% block content %}
 
-<div class=" container my-4 row mx-6">
-  <div class="col-10">
+<div class=" container my-4 d-flex mx-6">
+  <div class="">
     <div class="">
       <h2>{{post.title}}</h2>
       <p class="text-secondary ts-6">{{post.content}}</p>
@@ -23,10 +23,11 @@
 
   </div>
 
-  <div class="col-2">
+  <div class="">
     <h2>Contributors</h2>
     {% for contributor in contributors %}
     <small>@{{contributor}}</small>
+    <hr>
     {% endfor %}
   </div>
 </div>

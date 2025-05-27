@@ -92,7 +92,7 @@ def forum(request):
 def readPost(request, pk):
     post = Post.objects.get(id=pk)
     comments =  post.comment_set.all() 
-    userContribs = post.persons.all()
+    userContribs = post.contributors.all()
     print(f"====> {userContribs}")
     form = CommentForm()
     author = request.user.author
@@ -106,7 +106,7 @@ def readPost(request, pk):
                 author = author, 
                 comment = comment
             )
-            post.people.add(request.user)
+            post.contributors.add(request.user)
             return redirect('read-post',pk=pk)
 
     context = {"post":post, "form":form, "comments":comments,"contributors":userContribs}
@@ -122,6 +122,8 @@ def recipe(request, pk):
     recipe = Recipe.objects.get(id=pk) 
     context = {'recipe':recipe}
     return render(request, 'base/recipe.html',context)
+
+
 
 """
 We are now starting the CRUD operations by this we mean Create Read Update and Delete
