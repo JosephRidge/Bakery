@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-
+from django_daraja.mpesa.core import MpesaClient
 def createUser(request):
     form = UserCreationForm()  
     bio  = AuthorForm()
@@ -61,7 +61,17 @@ def logoutUser(request):
         return redirect('login')
     return render(request, "base/logout_form.html")
 
-def home(request):
+def home(request): 
+    cl = MpesaClient()
+    # Use a Safaricom phone number that you have access to, for you to be able to view the prompt.
+    phone_number = '0768966660'
+    amount = 1
+    account_reference = 'reference'
+    transaction_desc = 'Description'
+    callback_url = 'https://api.darajambili.com/express-payment'
+    response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
+    # return HttpResponse(response)
+    print(f"==>resp: {response}")
     return render(request, 'base/home.html')
 
 def createPost(request):

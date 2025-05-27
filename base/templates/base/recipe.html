@@ -1,4 +1,7 @@
 {% extends 'main.html'%} {% block content%}
+
+
+
 <div class="container my-4 fs-6">
   <a href="{% url 'update-recipe' recipe.id %}" class="badge text-dark bg-warning">Edit me</a>
   <h1>{{recipe.name}} <span class="badge bg-info">{{recipe.price}}</span></h1>

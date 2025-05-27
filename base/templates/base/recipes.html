@@ -1,19 +1,42 @@
 {% extends 'main.html'%}
 
 {% block content%}
+<div class="container-fluid page-header py-6 wow fadeIn" data-wow-delay="0.1s">
+  <div class="container text-center pt-5 pb-3">
+      <h1 class="text-white animated slideInDown mb-3">Recipes</h1>
+      <nav aria-label="breadcrumb animated slideInDown">
+          <ol class="breadcrumb justify-content-center mb-0">
+              <li class="breadcrumb-item"><a class="text-white" href="{% url 'home' %}">Home</a></li>
+              {% comment %} <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li> {% endcomment %}
+              <li class="breadcrumb-item text-primary active" aria-current="page">Recipes</li>
+          </ol>
+      </nav>
+  </div>
+</div> 
+
+<div class="  text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+  <p class="text-primary text-uppercase mb-2">// Bakery Recipes</p>
+  <h1 class="display-6 mb-4 text-light">Explore The Categories Of Our Bakery Recipes</h1>
+</div>
 
 <div class="container list-group row my-4 mx-4  ">
   <span class="badge text-dark bg-info w-25 my-2 p-2"> <a href="{% url 'create-recipe' %}">Create New Recipe</a> </span>
-  
-  
+
+
+ </div>
+ <div class="row g-4">
   {% for recipe in recipes %}
-  <a href="{% url 'recipe' recipe.id %}" 
-  class="list-group-item list-group-item-action bg-dark text-light"> 
-    {{recipe.id}}.{{recipe.name}}</a>
-
-    <br />
-
-  {% endfor %} {% endblock content %}
-
-
+  <div class="col-12 col-sm-6 col-md-4 col-lg-3   fadeInUp" data-wow-delay="0.1s">
+    <div class="product-item d-flex flex-column h-100 bg-white rounded overflow-hidden">
+        <div class="text-center p-4">
+            <div class="d-inline-block p-2  bg-primary rounded-pill px-3 mb-3">ksh. {{recipe.price}}</div>
+            <h3 class="mb-3">{{recipe.name}} </h3>
+            <span class="text-truncate text-dark container">{{recipe.decription}}</span>
+        </div> 
+    </div>
+  {% endfor %} 
+</div> 
 </div>
+
+{% endblock content %}
+

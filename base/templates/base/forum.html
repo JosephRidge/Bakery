@@ -1,11 +1,11 @@
 {% extends 'main.html'%}
 {% block content%}
-<div class="container my-4">
+<div class="container my-4 text-light">
 
     <a class="badge bg-warning text-dark text-decoration-none p-2 " href="{% url 'create-post'%}">Create Post </a>
 
     {% for post in posts %}
-    <a class="mt-2 text-decoration-none " href="{% url 'read-post' post.id %}"><h2>{{post.title }}</h2> </a>
+    <a class="my-4 text-decoration-none text-light " href="{% url 'read-post' post.id %}"><h2>{{post.title }}</h2> </a>
     <hr>
     {% endfor %}
     
