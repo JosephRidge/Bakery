@@ -26,7 +26,7 @@
   <div class="">
     <h2>Contributors</h2>
     {% for contributor in contributors %}
-    <small>@{{contributor}}</small>
+    <small><a class="text-decoration-none " href="{% url 'profile' contributor.id%}" >@{{contributor}}</a></small>
     <hr>
     {% endfor %}
   </div>

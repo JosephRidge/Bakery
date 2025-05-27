@@ -124,6 +124,12 @@ def recipe(request, pk):
     return render(request, 'base/recipe.html',context)
 
 
+def userProfile(request,pk):
+    author = Author.objects.get(user=pk)
+    posts = author.post_set.all()
+
+    context = {"author":author, "posts":posts}
+    return render(request,"base/user_profile.html", context)
 
 """
 We are now starting the CRUD operations by this we mean Create Read Update and Delete
