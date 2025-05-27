@@ -1,9 +1,22 @@
 {% extends 'main.html'%}
 
 {% block content%}
-<form method="POST" class="container my-4 ">
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header py-6 wow fadeIn" data-wow-delay="0.1s">
+      <div class="container text-center pt-5 pb-3">
+          <h1 class="display-4 text-white animated slideInDown mb-3">Login to access discounts</h1>
+          <nav aria-label="breadcrumb animated slideInDown">
+              <ol class="breadcrumb justify-content-center mb-0">
+                  <li class="breadcrumb-item"><a class="text-white" href="{% url 'home' %}">back</a></li> 
+                  <li class="breadcrumb-item text-primary active" aria-current="page">Login</li>
+              </ol>
+          </nav>
+      </div>
+  </div>
+  <!-- Page Header End -->
+<form method="POST" class="container my-2 ">
     {% csrf_token %}
-    <div class="form-group  w-50">
+    <div class="form-group w-50">
       <label for="exampleInputUserName">User Name</label>
       <input type="text" class="form-control" name="username" id="exampleInputUserName"  placeholder="Enter user name">
      </div>

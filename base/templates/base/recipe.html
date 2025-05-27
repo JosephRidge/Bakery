@@ -1,16 +1,38 @@
 {% extends 'main.html'%} {% block content%}
-<div class="container my-4 fs-6">
-  <a href="{% url 'update-recipe' recipe.id %}" class="badge text-dark bg-warning">Edit me</a>
-  <h1>{{recipe.name}} <span class="badge bg-info">{{recipe.price}}</span></h1>
-  <p>
-    Level: <span class="badge bg-success">{{recipe.get_level_display}}</span>
+ <!-- Page Header Start -->
+ <div class="container-fluid page-header py-6 wow fadeIn" data-wow-delay="0.1s">
+  <div class="container text-center pt-5 pb-3">
+      <h1 class="display-4 text-white animated slideInDown mb-3">Recipes</h1>
+      <nav aria-label="breadcrumb animated slideInDown">
+          <ol class="breadcrumb justify-content-center mb-0">
+              <li class="breadcrumb-item"><a class="text-white" href="{% url 'home' %}">Home</a></li> 
+              <li class="breadcrumb-item " ><a class="text-white" href="{% url 'recipes' %}">Recipes</a></li>
+              <li class="breadcrumb-item text-primary active" aria-current="page">{{recipe.name}}</li>
+          </ol>
+          <ul>
+            <ol class="breadcrumb justify-content-center mb-0"><li class="breadcrumb-item"><a class="text-white" href="{% url 'create-recipe' %}">Create New Recipe</a></li> 
+            </ol> 
+          {% comment %} <a href="{% url 'create-recipe' %}" class="btn btn-primary rounded-pill py-3 px-5 col-4">Create New Recipe</a> {% endcomment %}
+      </nav>
+  </div>
+</div>
+<!-- Page Header End -->
+<div class="container my-2 fs-6">
+
+  <div class="d-inline-block border border-primary  text-dark rounded-pill px-3 mb-3">KsH. {{recipe.price}}</div>
+  <h1>{{recipe.name}}                
+  </h1> 
+  <p class="text-dark">
+    Level: <span class="badge bg-dark text-primary p-2">{{recipe.get_level_display}}</span>
     <br />
     {{recipe.decription}}
   </p>
   <h2>Ingredients</h2>
-  <div>{{recipe.ingredients}}</div>
-  <h2>steps</h2>
-  <div>{{recipe.steps}}</div>
+  <p class="text-dark">{{recipe.ingredients}}</p>
+  <h2>Instructions</h2>
+  <p class="text-dark">{{recipe.steps}}</p>
+
+  <a href="{% url 'update-recipe' recipe.id %}" class="badge text-dark bg-warning my-2 p-2">Edit me</a>
 </div>
 
 {% endblock content %}

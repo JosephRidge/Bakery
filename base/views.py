@@ -62,7 +62,9 @@ def logoutUser(request):
     return render(request, "base/logout_form.html")
 
 def home(request):
-    return render(request, 'base/home.html')
+    recipes = Recipe.objects.all()
+    context = {"recipes":len(recipes)}
+    return render(request, 'base/home.html', context)
 
 def createPost(request):
     form = PostForm()
@@ -136,7 +138,7 @@ def createRecipe(request):
         if form.is_valid():
             form.save() 
             return redirect('recipes') 
-    context = {'form': form}
+    context = {'form': form,"from":"create"}
     return render(request,'base/recipe_form.html', context)
 
 @login_required(login_url="login")
@@ -148,7 +150,7 @@ def updateRecipe(request, pk):
         form.save()
         return redirect('recipes')
 
-    context = {'form':form}
+    context = {'form': form,"from":"update"}
     return render(request,'base/recipe_form.html', context)
 
 # read all from the DB

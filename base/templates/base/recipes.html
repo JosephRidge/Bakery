@@ -1,19 +1,49 @@
 {% extends 'main.html'%}
 
 {% block content%}
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header py-6 wow fadeIn" data-wow-delay="0.1s">
+      <div class="container text-center pt-5 pb-3">
+          <h1 class="display-4 text-white animated slideInDown mb-3">Recipes</h1>
+          <nav aria-label="breadcrumb animated slideInDown">
+              <ol class="breadcrumb justify-content-center mb-0">
+                  <li class="breadcrumb-item"><a class="text-white" href="{% url 'home' %}">Home</a></li> 
+                  <li class="breadcrumb-item text-primary active" aria-current="page">Recipes</li>
+              </ol>
+              <ul>
+                <ol class="breadcrumb justify-content-center mb-0"><li class="breadcrumb-item"><a class="text-white" href="{% url 'create-recipe' %}">Create New Recipe</a></li> 
+                </ol> 
+              {% comment %} <a href="{% url 'create-recipe' %}" class="btn btn-primary rounded-pill py-3 px-5 col-4">Create New Recipe</a> {% endcomment %}
+          </nav>
+      </div>
+  </div>
+  <!-- Page Header End -->
+<div class="container list-group row wow my-4 mx-4  ">
+  {% comment %} <span class="badge text-dark bg-info w-25 my-2 p-2"> <a href="{% url 'create-recipe' %}">Create New Recipe</a> </span> {% endcomment %}
 
-<div class="container list-group row my-4 mx-4  ">
-  <span class="badge text-dark bg-info w-25 my-2 p-2"> <a href="{% url 'create-recipe' %}">Create New Recipe</a> </span>
   
-  
+  <div class="row g-4">
   {% for recipe in recipes %}
-  <a href="{% url 'recipe' recipe.id %}" 
-  class="list-group-item list-group-item-action bg-dark text-light"> 
-    {{recipe.id}}.{{recipe.name}}</a>
+    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="product-item d-flex flex-column bg-white rounded overflow-hidden h-100">
+            <div class="text-center p-4">
+                <div class="d-inline-block border border-primary  text-dark rounded-pill px-3 mb-3">KsH. {{recipe.price}}</div>
+                <h3 class="mb-3">{{recipe.name}}</h3>
+                <span class="text-truncate text-dark"> {{recipe.decription}}</span>
+            </div>
+            <div class="position-relative mt-auto">
+              <div class="h-25"> <img class="img-fluid img-fluid w-100" src="/base/static/img/product-1.jpg" alt=""></div>
+               
+                <div class="product-overlay">
+                    <a class="btn btn-lg-square btn-outline-light rounded-circle" href="{% url 'recipe' recipe.id %}"><i class="fa fa-eye text-primary"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <br />
-
-  {% endfor %} {% endblock content %}
+  {% endfor %}
+</div> 
+{% endblock content %}
 
 
 </div>
