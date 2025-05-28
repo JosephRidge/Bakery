@@ -1,5 +1,19 @@
-{% extends 'main.html'%} {% block content %}
+{% comment %} {% extends 'main.html'%} {% endcomment %}
 
+{% block content %}
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header py-6 wow fadeIn" data-wow-delay="0.1s">
+      <div class="container text-center pt-5 pb-3">
+          <h1 class="display-4 text-white animated slideInDown mb-3">Posts</h1>
+          <nav aria-label="breadcrumb animated slideInDown">
+              <ol class="breadcrumb justify-content-center mb-0">
+                  <li class="breadcrumb-item"><a class="text-white" href="{% url 'home' %}">Home</a></li> 
+                  <li class="breadcrumb-item text-primary active" aria-current="page">{{post.title}}</li>
+              </ol>
+          </nav>
+      </div>
+  </div>
+  <!-- Page Header End -->
 <div class=" container my-4 d-flex mx-6">
   <div class="">
     <div class="">
@@ -8,7 +22,8 @@
     </div>
     <hr>
 
-    <h2 class="badge bg-secondary text-dark">Comments: </h2>
+  <div class="bg-light p-2">
+    <h2 class="badge bg-secondary text-light p-2">Comments: </h2>
     {% for comment in comments %}
     <p class="text-secondary">{{comment.comment}}</p>
     
@@ -20,6 +35,7 @@
     {% include 'base/post_form.html' %}
 
    </div>
+  </div>
 
   </div>
 

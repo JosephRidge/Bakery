@@ -6,6 +6,11 @@ class PostForm(ModelForm):
         model = Post
         fields =['title','content']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["title"].widget.attrs.update({"class": "form-control"})
+        self.fields["content"].widget.attrs.update({"class": "form-control h-75"})
+
 class AuthorForm(ModelForm):
     class Meta:
         model = Author
