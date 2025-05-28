@@ -170,6 +170,19 @@ def updateRecipe(request, pk):
 def buyRecipe(request, pk):
     recipe = Recipe.objects.get(id=pk)
     context = { "recipe":recipe}
+    if request.method == "POST": 
+        phoneNumber = request.POST.get('phone')
+        cl = MpesaClient() 
+        phone_number = phoneNumber
+        amount = 1 #int(recipe.price)
+        account_reference = 'reference'
+        transaction_desc = 'Description'
+        callback_url = 'https://api.darajambili.com/express-payment'
+        response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
+        # return HttpResponse(response)
+        print(f"==> res: {response}")
+        messages.info(request, f"STATUS: {response}")
+
     return render(request, 'base/payment_form.html', context)
 
 
