@@ -1,0 +1,51 @@
+{% extends 'main.html'%}
+ {% block content%} 
+ <!-- Page Header Start -->
+ <div class="container-fluid page-header py-6 wow fadeIn" data-wow-delay="0.1s">
+  <div class="container text-center pt-5 pb-3">
+      <h1 class="display-4 text-white animated slideInDown mb-3">Purchase</h1>
+      <nav aria-label="breadcrumb animated slideInDown">
+          <ol class="breadcrumb justify-content-center mb-0">
+              <li class="breadcrumb-item"><a class="text-white" href="{% url 'home' %}">Home</a></li> 
+              <li class="breadcrumb-item " ><a class="text-white" href="{% url 'recipes' %}">Recipes</a></li>
+              <li class="breadcrumb-item text-primary active" aria-current="page">Purchase {{recipe.name}}</li>
+          </ol>
+          <ul>
+            {% if from == 'create '%}
+            <ol class="breadcrumb justify-content-center mb-0"><li class="breadcrumb-item"><a class="text-white" href="{% url 'create-recipe' %}">Create New Recipe</a></li> 
+            {% endif %}
+            </ol> 
+          {% comment %} <a href="{% url 'create-recipe' %}" class="btn btn-primary rounded-pill py-3 px-5 col-4">Create New Recipe</a> {% endcomment %}
+      </nav>
+  </div>
+</div>
+<!-- Page Header End -->
+<div class="registration-form ">
+  <form method="POST" class="border border-primary">
+
+  {% csrf_token %}   
+  <h1 class=" text-dark animated slideInDown text-center mb-3">Buy {{recipe.name}} Recipe </h1>
+  {% comment %} {% for field in form  %} {% endcomment %}
+  <div class="form-floating">
+    {{field}}
+    <input  type="tel" 
+    name="phone" class="form-control"  placeholder="Enter Phone Number">
+    <label  >Enter Phone Number( eg. 07123456789):</label>
+</div>
+<button type="submit" class="btn btn-block bg-dark text-light my-2 mx-auto"> pay </button>
+       
+  {% comment %} {% endfor %}
+      <div class="form-group">
+        {% if from == 'create' %}
+          <button type="submit" class="btn btn-block bg-primary">Create Recipe</button>
+          {% else %}
+          <button type="submit" class="btn btn-block bg-primary">Update Recipe</button>
+
+        {% endif %} {% endcomment %}
+      </div>
+  </form> 
+</div>
+ 
+</div> 
+
+{% endblock content %}

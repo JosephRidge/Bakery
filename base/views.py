@@ -166,6 +166,13 @@ def updateRecipe(request, pk):
     context = {'form': form,"from":"update"}
     return render(request,'base/recipe_form.html', context)
 
+
+def buyRecipe(request, pk):
+    recipe = Recipe.objects.get(id=pk)
+    context = { "recipe":recipe}
+    return render(request, 'base/payment_form.html', context)
+
+
 # read all from the DB
 def shops(request):
     shops = Shop.objects.all()
