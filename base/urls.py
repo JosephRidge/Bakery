@@ -20,4 +20,7 @@ urlpatterns = [
        path('forum/',views.forum, name='forum'),
        path('create-post/',views.createPost, name='create-post'),
        path('post/<str:pk>/',views.readPost, name='read-post'),
+       # path('api/', include('rest_framework.urls'))
+
+
 ]
