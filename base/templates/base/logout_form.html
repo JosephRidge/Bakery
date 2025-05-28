@@ -1,9 +1,26 @@
 {% extends 'main.html'%} {% block content%} 
+<div class="container-fluid page-header py-6 wow fadeIn" data-wow-delay="0.1s">
+  <div class="container text-center pt-5 pb-3">
+      <h1 class="display-4 text-white animated slideInDown mb-3">Logout</h1>
+      <nav aria-label="breadcrumb animated slideInDown">
+          <ol class="breadcrumb justify-content-center mb-0">
+              <li class="breadcrumb-item"><a class="text-white" href="{% url 'home' %}">Home</a></li>  
+              <li class="breadcrumb-item text-primary active" aria-current="page">Logout</li>
+          </ol>
+          <ul>
+            {% if from == 'create '%}
+            <ol class="breadcrumb justify-content-center mb-0"><li class="breadcrumb-item"><a class="text-white" href="{% url 'create-recipe' %}">Create New Recipe</a></li> 
+            {% endif %}
+            </ol> 
+          {% comment %} <a href="{% url 'create-recipe' %}" class="btn btn-primary rounded-pill py-3 px-5 col-4">Create New Recipe</a> {% endcomment %}
+      </nav>
+  </div>
+</div>
 <form method="POST" class="container my-4 ">
   {% csrf_token %}
-  <div class="d-flex"> 
-    <a class="badge bg-success py-2 px-3 m-2 " href="{{request.META.HTTP_REFERER}}">I do not want to log out yet!</a>
-    <input type="submit" value="logout"/> 
+  <div class="d-flex gap-3 justify-content-center "> 
+    <div><a class="btn btn-block bg-dark text-light " href="{{request.META.HTTP_REFERER}}">I do not want to log out yet!</a></div>
+    <button type="submit" class="btn btn-block bg-primary"> logout</button>
     <div>
 </form>
 
