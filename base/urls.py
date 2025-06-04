@@ -18,6 +18,7 @@ urlpatterns = [
        path('shop/delete-shop/<str:pk>/',views.deleteShop, name='delete-shop'),
        path('about/',views.about, name='about'),
        path('forum/',views.forum, name='forum'),
+       path('abstract/',views.createWithAbstractUser, name='abstractUser'),
        path('create-post/',views.createPost, name='create-post'),
        path('post/<str:pk>/',views.readPost, name='read-post'),
        path('recipe/buy/<str:pk>/',views.buyRecipe, name='buy-recipe'),

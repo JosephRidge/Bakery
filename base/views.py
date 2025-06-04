@@ -1,18 +1,25 @@
 from django.shortcuts import render, redirect
 from .models import Recipe, Shop , Author, Comment, Post
-from .forms import RecipeForm, ShopForm, PostForm,AuthorForm, CommentForm
+from .forms import RecipeForm, ShopForm, PostForm,AuthorForm, CommentForm, UserCreationForm
 from django.contrib import messages
 
 # authentication 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth.forms import UserCreationForm
 
 # MPESA
 
 from django_daraja.mpesa.core import MpesaClient
 
+
+def createWithAbstractUser(request):
+    form = UserCreationForm()  
+    context = {"form":form}
+
+
+    return render(request, 'base/abstract.html', context)
 def createUser(request):
     form = UserCreationForm()  
     bio  = AuthorForm()
